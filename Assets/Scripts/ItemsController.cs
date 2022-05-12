@@ -4,33 +4,47 @@ using UnityEngine;
 
 public class ItemsController : MonoBehaviour
 {
-    private Camera camera;
+    private Camera cameraView;
     private int activeWeapon;
+    private IItem[] components;
+    private RaycastHit hit;
 
     private void Start()
     {
-        camera = GetComponentInChildren<Camera>();
+        cameraView = GetComponentInChildren<Camera>();
     }
 
     private void Update()
     {
-        if(Input.GetKeyDown(KeyCode.E))
+        CheckItem();
+        if(Input.GetButtonDown("Interract"))
         {
             Interract();
         }
     }
 
-    private void Interract()
+    private void CheckItem()
     {
-        RaycastHit hit;
-        Ray ray = camera.ScreenPointToRay(Input.mousePosition);
+        Ray ray = cameraView.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit))
         {
-            var components = hit.transform.gameObject.GetComponents<IItem>();
+            components = hit.transform.gameObject.GetComponents<IItem>();
             if (components.Length > 0)
             {
-                hit.transform.gameObject.GetComponent<IItem>().PickUp();
+                InfoUI.ShowItem(hit.transform.gameObject);
             }
+            else
+            {
+                InfoUI.HideItem();
+            }
+        }
+    }
+
+    private void Interract()
+    {
+        if (components.Length > 0)
+        {
+            hit.transform.gameObject.GetComponent<IItem>().PickUp();
         }
     }
  

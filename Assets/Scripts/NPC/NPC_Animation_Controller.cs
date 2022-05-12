@@ -9,7 +9,6 @@ public class NPC_Animation_Controller : MonoBehaviour
     NavMeshAgent agent;
     float animtime;
     Animations anistate;
-    float t = 0;
 
     public Animations Ani_State//вернуть или задать анимацию npc
     {

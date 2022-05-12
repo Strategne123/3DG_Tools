@@ -9,7 +9,7 @@ public class Weapon_Controller : MonoBehaviour
     private static Weapon_Controller self;
     public List<GameObject> weapons=new List<GameObject>();
     [SerializeField] private int maxWeaponCount = 2;
-
+    
     private void Start()
     {
         if(!self)
@@ -20,13 +20,17 @@ public class Weapon_Controller : MonoBehaviour
 
     private void Update()
     {
-        if (Input.GetButton("Fire1"))
+        if (Input.GetButton("Fire1") && self.weapons.Count>0)
         {
             self.weapons[activeWeapon].GetComponent<IWeapon>().Shoot();
         }
         if (Input.GetAxis("Mouse ScrollWheel") != 0)
         {
             Swap(Input.GetAxis("Mouse ScrollWheel"));
+        }
+        if (Input.GetKeyDown(KeyCode.Comma))
+        {
+            Throw();
         }
     }
 
@@ -47,7 +51,8 @@ public class Weapon_Controller : MonoBehaviour
 
     private void ToHand(GameObject weapon)
     {
-        weapon.GetComponent<Rigidbody>().useGravity = false;
+        //weapon.GetComponent<Rigidbody>().useGravity = false;
+        weapon.GetComponent<Rigidbody>().isKinematic = true;
         weapon.GetComponent<Collider>().isTrigger = true;
         weapon.transform.position = hand.position;
         weapon.transform.rotation = hand.rotation;
@@ -56,18 +61,22 @@ public class Weapon_Controller : MonoBehaviour
 
     private void FromHand(GameObject weapon)
     {
-        weapon.GetComponent<Rigidbody>().useGravity = true;
+        //weapon.GetComponent<Rigidbody>().useGravity = true;
         weapon.GetComponent<Collider>().isTrigger = false;
+        weapon.GetComponent<Rigidbody>().isKinematic = false;
         weapon.transform.parent = null;
     }
 
-
-
     private static void Throw()
     {
-        Instantiate(self.weapons[activeWeapon], self.weapons[activeWeapon].transform);
-        self.weapons.RemoveAt(activeWeapon);
-        Swap(-1);
+        if (self.weapons.Count > 0)
+        {
+            var deleteWeapon = self.weapons[activeWeapon];
+            self.FromHand(deleteWeapon);
+            Swap(-1);
+            self.weapons.Remove(deleteWeapon);
+            deleteWeapon.SetActive(true);
+        }
     }
 
     private static void Swap(float n)

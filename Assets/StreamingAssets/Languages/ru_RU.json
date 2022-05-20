@@ -1,8 +1,16 @@
 {
     "items":[
         {
-            "key": "ItemText",
-            "value": "Чтобы поднять - нажмите"
+            "key": "InterractText",
+            "value": "Чтобы поднять - нажмите F"
+        },
+        {
+            "key": "M1911",
+            "value": "M1911"
+        },
+        {
+            "key": "M4",
+            "value": "M4"
         }
     ]
 }

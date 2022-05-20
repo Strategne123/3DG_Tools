@@ -4,7 +4,9 @@ using UnityEngine;
 public class InfoUI : MonoBehaviour
 {
     private static InfoUI self;
-    [SerializeField] private TextMeshProUGUI itemText;
+
+    [SerializeField] private TextMeshProUGUI interractText;
+    [SerializeField] private TextMeshProUGUI itemInfoText;
 
     private void Start()
     {
@@ -16,18 +18,18 @@ public class InfoUI : MonoBehaviour
 
     public static void ShowItem(GameObject item)
     {
-        if (!self.itemText.gameObject.activeInHierarchy)
+        if (!self.itemInfoText.gameObject.activeInHierarchy)
         {
-            self.itemText.gameObject.SetActive(true);
-            self.itemText.text = self.itemText.text + Input.GetAxis("Interract");
+            self.itemInfoText.gameObject.SetActive(true);
+            self.itemInfoText.text = item.GetComponent<LocalizedName>().GetName() + " " + self.interractText.text;
         }
     }
 
     public static void HideItem()
     {
-        if (self.itemText.gameObject.activeInHierarchy)
+        if (self.itemInfoText.gameObject.activeInHierarchy)
         {
-            self.itemText.gameObject.SetActive(false);
+            self.itemInfoText.gameObject.SetActive(false);
         }
     }
 
